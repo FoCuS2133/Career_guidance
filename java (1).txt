@@ -1,0 +1,85 @@
+/* JavaScript */
+
+// Массив вопросов с вариантами ответов
+var questions = [
+{
+question: "Какие виды деятельности Вам больше нравятся?",
+options: ["Путешествия, исследование", "Решение технических проблем", "Общение с людьми", "Творчество, искусство", "Спорт, физическая активность", "Работа с числами, учет, анализ"],
+types: ["A", "R", "S", "I", "E", "C"]
+},
+{
+question: "Какие навыки у Вас лучше развиты?",
+options: ["Физическая сила, ловкость, выносливость", "Техническое мышление", "Лидерские качества", "Способность к общению", "Творческий потенциал", "Способность к анализу и организации информации"],
+types: ["E", "R", "S", "S", "A", "C"]
+},
+{
+question: "Какую сферу деятельности Вы бы выбрали?",
+options: ["Приключенческий туризм, спортивные соревнования", "Инженерные разработки, IT-сфера", "Менеджмент, бизнес, политика", "Сфера услуг, медицина", "Творческая деятельность", "Финансы, бухгалтерия"],
+types: ["A", "R", "E", "S", "I", "C"]
+},
+{
+question: "Как Вы обычно узнаете новую информацию?",
+options: ["Исследуя новые места и события", "Экспериментируя и творчески работая", "Общаясь с людьми и участвуя в социальной жизни", "Читая книги, журналы, занимаясь самообразованием", "Занимаясь спортом или другой физической активностью", "Анализируя информацию и решая задачи"],
+types: ["A", "I", "S", "R", "E", "C"]
+}]
+// Функция для отображения следующего вопроса
+function showNextQuestion() {
+var question = questions[questionNumber]; // Текущий вопрос
+var options = question.options; // Варианты ответов
+var types = question.types; // Категории, соответствующие вариантам ответов
+var html = "";
+// Создаем список вариантов ответов
+for (var i = 0; i < options.length; i++) {
+html += "<li><input type='radio' name='answer' value='" + types[i] + "' required>" + options[i] + "</li>";
+}
+// Добавляем вопрос и список ответов на страницу
+document.getElementById("question").innerHTML = question.question;
+document.getElementById("options").innerHTML = html;
+// Если это последний вопрос, меняем текст на кнопке "Далее" на "Завершить"
+if (questionNumber === questions.length - 1) {
+document.getElementById("next").innerHTML = "Завершить";
+}
+}
+
+// Функция для обработки ответа пользователя на вопрос
+function answerQuestion() {
+var answer = document.querySelector("input[name='answer']:checked"); // Выбранный пользователем вариант ответа
+if (answer) {
+answers.push(answer.value); // Добавляем ответ пользователя в массив
+questionNumber++; // Переходим к следующему вопросу
+if (questionNumber < questions.length) {
+showNextQuestion(); // Отображаем следующий вопрос
+} else {
+showResult(); // Отображаем результаты теста
+}
+}
+}
+
+// Функция для отображения результатов теста
+function showResult() {
+var types = ["R", "I", "A", "S", "E", "C"]; // Категории личности
+var typeCounts = [0, 0, 0, 0, 0, 0]; // Количество ответов, соответствующих каждой категории личности
+// Подсчитываем количество ответов, соответствующих каждой категории личности
+for (var i = 0; i < answers.length; i++) {
+for (var j = 0; j < types.length; j++) {
+if (answers[i] === types[j]) {
+typeCounts[j]++;
+break;
+}
+}
+}
+// Находим категорию личности с максимальным количеством ответов
+var maxCount = typeCounts[0];
+var maxType = 0;
+for (var i = 1; i < typeCounts.length; i++) {
+if (typeCounts[i] > maxCount) {
+maxCount = typeCounts[i];
+maxType = i;
+}
+}
+// Отображаем результаты теста на странице
+var result = "Ваша категория личности - " + types[maxType];
+document.getElementById("question").innerHTML = result;
+document.getElementById("options").innerHTML = "";
+document.getElementById("next").style.display = "none";
+}

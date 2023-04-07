@@ -1,0 +1,110 @@
+/* CSS */
+
+/* Общие стили */
+body {
+font-family: Arial, sans-serif;
+margin: 0;
+}
+
+.container {
+max-width: 800px;
+margin: 0 auto;
+padding: 20px;
+}
+
+h1 {
+text-align: center;
+}
+
+/* Стили для вопросов */
+#question {
+font-size: 24px;
+margin-bottom: 20px;
+}
+
+.options {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+}
+
+.option {
+display: flex;
+align-items: center;
+gap: 10px;
+background-color: #eee;
+padding: 10px;
+border-radius: 5px;
+cursor: pointer;
+}
+
+.option:hover {
+background-color: #ddd;
+}
+
+.option input[type="checkbox"] {
+margin-right: 10px;
+}
+
+/* Стили для кнопок */
+button {
+border: none;
+border-radius: 5px;
+padding: 10px 20px;
+font-size: 16px;
+font-weight: bold;
+cursor: pointer;
+}
+
+button:hover {
+opacity: 0.8;
+}
+
+#next-button {
+background-color: #5cb85c;
+color: #fff;
+margin-top: 20px;
+}
+
+#submit-button {
+background-color: #f0ad4e;
+color: #fff;
+margin-top: 20px;
+}
+
+/* Стили для результатов */
+#result-container {
+text-align: center;
+margin-top: 20px;
+}
+
+#result {
+font-size: 24px;
+font-weight: bold;
+}
+
+#result-description {
+margin-top: 10px;
+}
+
+/* Стили для футера */
+footer {
+text-align: center;
+background-color: #eee;
+padding: 10px;
+position: fixed;
+bottom: 0;
+left: 0;
+width: 100%;
+}
+
+/* Стили для мобильных устройств */
+@media screen and (max-width: 600px) {
+.option {
+flex-basis: 100%;
+}
+
+button {
+width: 100%;
+}
+}
