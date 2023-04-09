@@ -1,177 +1,56 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Тест по модели Голланда</title>
-    <style>
-      /* Стилизация элементов страницы */
-      #question {
-        font-weight: bold;
-        margin-bottom: 10px;
-      }
-
-      #answer-container {
-        display: flex;
-        flex-direction: column;
-      }
-
-      #answer-container label {
-        margin-bottom: 5px;
-      }
-
-      #next-button {
-        margin-top: 10px;
-        padding: 5px;
-        border-radius: 5px;
-        background-color: #4CAF50;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Тест по модели Голланда</h1>
-    <p id="question">Какие виды деятельности вам нравятся?</p>
-    <div id="answer-container">
-      <label><input type="checkbox" value="R">Реалистические</label>
-      <label><input type="checkbox" value="I">Интеллектуальные</label>
-      <label><input type="checkbox" value="A">Художественные</label>
-      <label><input type="checkbox" value="S">Социальные</label>
-      <label><input type="checkbox" value="E">Предпринимательские</label>
-      <label><input type="checkbox" value="C">Конвенциональные</label>
-    </div>
-    <button id="next-button">Следующий вопрос</button>
-    <script>
-      // Обработчик клика по кнопке "Следующий вопрос"
-      document.getElementById("next-button").addEventListener("click", function() {
-        // Получаем все выбранные ответы на текущий вопрос
-        var selectedAnswers = document.querySelectorAll("#answer-container input:checked");
-        // Если ни один ответ не выбран, выводим сообщение об ошибке
-        if (selectedAnswers.length === 0) {
-          alert("Пожалуйста, выберите хотя бы один ответ.");
-          return;
-        }
-        // Сохраняем выбранные ответы в массив
-        var answers = [];
-        for (var i = 0; i < selectedAnswers.length; i++) {
-          answers.push(selectedAnswers[i].value);
-        }
-        // Очищаем контейнер с вариантами ответов
-        document.getElementById("answer-container").innerHTML = "";
-        // Если это был последний вопрос, выводим результаты
-        if (currentQuestion === questions.length - 1) {
-          showResults();
-        } else {
-          // Иначе выводим следующий вопрос
-          currentQuestion++;
-          showQuestion(currentQuestion);
-        }
-      });
-
-      // Массив с вопросами
-      var questions = [
-        {
-          text: "Какие виды деятельности вам нравятся?",
-          options: [
-            { text: "Реалистические", value: ""R" },
-{ text: "Интеллектуальные", value: "I" },
-{ text: "Художественные", value: "A" },
-{ text: "Социальные", value: "S" },
-{ text: "Предпринимательские", value: "E" },
-{ text: "Конвенциональные", value: "C" }
-]
-},
-{
-text: "Какую работу вы бы хотели выполнять?",
-options: [
-{ text: "Строительство и ремонт", value: "R" },
-{ text: "Научные исследования", value: "I" },
-{ text: "Изобразительное искусство", value: "A" },
-{ text: "Обслуживание и помощь людям", value: "S" },
-{ text: "Бизнес и финансы", value: "E" },
-{ text: "Компьютерные технологии", value: "C" }
-]
-},
-{
-text: "Какие навыки вы считаете наиболее важными?",
-options: [
-{ text: "Работа с инструментами и оборудованием", value: "R" },
-{ text: "Логическое мышление и анализ", value: "I" },
-{ text: "Художественный вкус и творческий потенциал", value: "A" },
-{ text: "Умение общаться и помогать людям", value: "S" },
-{ text: "Лидерские и организаторские навыки", value: "E" },
-{ text: "Работа с компьютером и офисными программами", value: "C" }
-]
-}
-];
-  var currentQuestion = 0; // Текущий вопрос
-
-  // Функция для отображения вопроса и вариантов ответов на странице
-  function showQuestion(questionIndex) {
-    var question = questions[questionIndex];
-    // Выводим текст вопроса
-    document.getElementById("question").textContent = question.text;
-    // Создаем контейнер для вариантов ответов
-    var answerContainer = document.getElementById("answer-container");
-    // Добавляем варианты ответов в контейнер
-    for (var i = 0; i < question.options.length; i++) {
-      var option = question.options[i];
-      var label = document.createElement("label");
-      var checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.value = option.value;
-      label.appendChild(checkbox);
-      label.appendChild(document.createTextNode(option.text));
-      answerContainer.appendChild(label);
-    }
-  }
-
-  // Функция для вывода результатов теста
-  function showResults() {
-    // Считаем количество ответов каждого типа
-    var counts = { R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 };
-    for (var i = 0; i < selectedOptions.length; i++) {
-var option = selectedOptions[i];
-counts[option]++;
-}
-    // Определяем наиболее подходящий тип личности по результатам теста
-    var personalityType = "";
-    var maxCount = 0;
-    for (var type in counts) {
-      if (counts[type] > maxCount) {
-        personalityType = type;
-        maxCount = counts[type];
-      }
-    }
-
-    // Выводим результат на страницу
-    document.getElementById("question").textContent = "Ваш тип личности: " + personalityType;
-    document.getElementById("answer-container").innerHTML = "";
-  }
-
-  // Обработчик события для кнопки "Далее"
-  document.getElementById("next-button").addEventListener("click", function() {
-    // Получаем выбранные варианты ответов
-    var selectedOptions = [];
-    var checkboxes = document.getElementsByTagName("input");
-    for (var i = 0; i < checkboxes.length; i++) {
-      if (checkboxes[i].type === "checkbox" && checkboxes[i].checked) {
-        selectedOptions.push(checkboxes[i].value);
-      }
-    }
-
-    // Переходим к следующему вопросу, если он есть
-    if (currentQuestion < questions.length - 1) {
-      currentQuestion++;
-      showQuestion(currentQuestion);
-    } else { // Иначе выводим результаты теста
-      showResults();
-    }
-  });
-
-  // Начинаем тест с первого вопроса
-  showQuestion(currentQuestion);
-</script>
+<head>
+  <title>Тест Голланда</title>
+  <meta charset="UTF-8">
+  <!-- Подключение CSS стилей -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <!-- Подключение JavaScript скрипта -->
+  <script src="script.js"></script>
+</head>
+<body>
+<!-- Основной контейнер страницы -->
+<div class="container">
+  <!-- Заголовок теста -->
+  <h1>Тест Голланда</h1>
+  <!-- Форма теста -->
+  <form id="test-form">
+    <h2>Выберите опции, которые лучше всего описывают вас:</h2>
+    <!-- Вопрос 1 -->
+    <label>
+      <input type="checkbox" name="question1" value="1">
+      Я предпочитаю работать с машинами или животными, а не с людьми.
+    </label>
+    <!-- Вопрос 2 -->
+    <label>
+      <input type="checkbox" name="question1" value="2">
+      Я творческий человек и люблю выражать себя через искусство, музыку или письмо.
+    </label>
+    <!-- Вопрос 3 -->
+    <label>
+      <input type="checkbox" name="question1" value="3">
+      Мне нравится организовывать и отслеживать информацию или данные.
+    </label>
+    <!-- Вопрос 4 -->
+    <label>
+      <input type="checkbox" name="question1" value="4">
+      Мне нравится работать с людьми, чтобы помочь им решать проблемы.
+    </label>
+    <!-- Вопрос 5 -->
+    <label>
+      <input type="checkbox" name="question1" value="5">
+      Мне нравится возглавлять и брать на себя ответственность в групповых ситуациях.
+    </label>
+    <!-- Вопрос 6 -->
+    <label>
+      <input type="checkbox" name="question1" value="6">
+      Я предпочитаю работать своими руками и создавать материальные вещи, а не работать с абстрактными идеями или концепциями.
+    </label>
+    <!-- Кнопка отправки формы -->
+    <button type="submit">Отправить</button>
+  </form>
+  <!-- Блок с результатами теста -->
+  <div id="results"></div>
+</div>
 </body>
 </html>
