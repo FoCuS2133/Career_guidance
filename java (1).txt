@@ -1,85 +1,132 @@
-/* JavaScript */
+// Получение формы теста из DOM
+const testForm = document.getElementById('test-form');
 
-// Массив вопросов с вариантами ответов
-var questions = [
-{
-question: "Какие виды деятельности Вам больше нравятся?",
-options: ["Путешествия, исследование", "Решение технических проблем", "Общение с людьми", "Творчество, искусство", "Спорт, физическая активность", "Работа с числами, учет, анализ"],
-types: ["A", "R", "S", "I", "E", "C"]
-},
-{
-question: "Какие навыки у Вас лучше развиты?",
-options: ["Физическая сила, ловкость, выносливость", "Техническое мышление", "Лидерские качества", "Способность к общению", "Творческий потенциал", "Способность к анализу и организации информации"],
-types: ["E", "R", "S", "S", "A", "C"]
-},
-{
-question: "Какую сферу деятельности Вы бы выбрали?",
-options: ["Приключенческий туризм, спортивные соревнования", "Инженерные разработки, IT-сфера", "Менеджмент, бизнес, политика", "Сфера услуг, медицина", "Творческая деятельность", "Финансы, бухгалтерия"],
-types: ["A", "R", "E", "S", "I", "C"]
-},
-{
-question: "Как Вы обычно узнаете новую информацию?",
-options: ["Исследуя новые места и события", "Экспериментируя и творчески работая", "Общаясь с людьми и участвуя в социальной жизни", "Читая книги, журналы, занимаясь самообразованием", "Занимаясь спортом или другой физической активностью", "Анализируя информацию и решая задачи"],
-types: ["A", "I", "S", "R", "E", "C"]
-}]
-// Функция для отображения следующего вопроса
-function showNextQuestion() {
-var question = questions[questionNumber]; // Текущий вопрос
-var options = question.options; // Варианты ответов
-var types = question.types; // Категории, соответствующие вариантам ответов
-var html = "";
-// Создаем список вариантов ответов
-for (var i = 0; i < options.length; i++) {
-html += "<li><input type='radio' name='answer' value='" + types[i] + "' required>" + options[i] + "</li>";
-}
-// Добавляем вопрос и список ответов на страницу
-document.getElementById("question").innerHTML = question.question;
-document.getElementById("options").innerHTML = html;
-// Если это последний вопрос, меняем текст на кнопке "Далее" на "Завершить"
-if (questionNumber === questions.length - 1) {
-document.getElementById("next").innerHTML = "Завершить";
-}
-}
+// Обработчик отправки формы
+testForm.addEventListener('submit', (event) => {
+// Отмена стандартного поведения формы (отправки и перезагрузки страницы)
+    event.preventDefault();
 
-// Функция для обработки ответа пользователя на вопрос
-function answerQuestion() {
-var answer = document.querySelector("input[name='answer']:checked"); // Выбранный пользователем вариант ответа
-if (answer) {
-answers.push(answer.value); // Добавляем ответ пользователя в массив
-questionNumber++; // Переходим к следующему вопросу
-if (questionNumber < questions.length) {
-showNextQuestion(); // Отображаем следующий вопрос
-} else {
-showResult(); // Отображаем результаты теста
-}
-}
-}
+// Получение ответов пользователя
+    const answers = Array.from(testForm.querySelectorAll('input[type=checkbox]:checked')).map((input) => {
+        return parseInt(input.value);
+    });
+
+// Получение типа личности пользователя на основе ответов
+    const personalityType = calculatePersonalityType(answers);
+
+// Отображение результатов теста
+    showResults(personalityType);
+    );
+
+// Функция для расчета типа личности на основе ответов пользователя
+    function calculatePersonalityType(answers) {
+// Счетчики для каждого типа личности
+        let realisticCount = 0;
+        let artisticCount = 0;
+        let investigativeCount = 0;
+        let socialCount = 0;
+        let enterprisingCount = 0;
+        let conventionalCount = 0;
+        // Подсчет ответов для каждого типа личности
+        for (let i = 0; i < answers.length; i++) {
+            switch (answers[i]) {
+                case 1:
+                    realisticCount++;
+                    break;
+                case 2:
+                    artisticCount++;
+                    break;
+                case 3:
+                    investigativeCount++;
+                    break;
+                case 4:
+                    socialCount++;
+                    break;
+                case 5:
+                    enterprisingCount++;
+                    break;
+                case 6:
+                    conventionalCount++;
+                    break;
+            }
+        }
+    }
+
+
+// Определение типа личности на основе подсчетов ответов
+        if (realisticCount > artisticCount && realisticCount > investigativeCount && realisticCount > socialCount && realisticCount > enterprisingCount && realisticCount > conventionalCount) {
+            return 'реалист';
+        } else if (
+            artisticCount > realisticCount && artisticCount > investigativeCount && artisticCount > socialCount && artisticCount > enterprisingCount && artisticCount > conventionalCount) {
+            return 'художник';
+        } else if (investigativeCount > realisticCount && investigativeCount > artisticCount && investigativeCount > socialCount && investigativeCount > enterprisingCount && investigativeCount > conventionalCount) {
+            return 'исследователь';
+        } else if (socialCount > realisticCount && socialCount > artisticCount && socialCount > investigativeCount && socialCount > enterprisingCount && socialCount > conventionalCount) {
+            return 'социальный работник';
+        } else if (enterprisingCount > realisticCount && enterprisingCount > artisticCount && enterprisingCount > investigativeCount && enterprisingCount > socialCount && enterprisingCount > conventionalCount) {
+            return 'предприниматель';
+        } else if (conventionalCount > realisticCount && conventionalCount > artisticCount && conventionalCount > investigativeCount && conventionalCount > socialCount && conventionalCount > enterprisingCount) {
+            return 'конвенционалист';
+        } else {
+            return 'несколько типов личности';
+        }
+    })
 
 // Функция для отображения результатов теста
-function showResult() {
-var types = ["R", "I", "A", "S", "E", "C"]; // Категории личности
-var typeCounts = [0, 0, 0, 0, 0, 0]; // Количество ответов, соответствующих каждой категории личности
-// Подсчитываем количество ответов, соответствующих каждой категории личности
-for (var i = 0; i < answers.length; i++) {
-for (var j = 0; j < types.length; j++) {
-if (answers[i] === types[j]) {
-typeCounts[j]++;
-break;
-}
-}
-}
-// Находим категорию личности с максимальным количеством ответов
-var maxCount = typeCounts[0];
-var maxType = 0;
-for (var i = 1; i < typeCounts.length; i++) {
-if (typeCounts[i] > maxCount) {
-maxCount = typeCounts[i];
-maxType = i;
-}
-}
-// Отображаем результаты теста на странице
-var result = "Ваша категория личности - " + types[maxType];
-document.getElementById("question").innerHTML = result;
-document.getElementById("options").innerHTML = "";
-document.getElementById("next").style.display = "none";
-}
+        function showResults(personalityType) {
+// Получение блока для отображения результатов из DOM
+            const resultsDiv = document.getElementById('results');
+            // Формирование текста с результатами
+            let resultsText = '';
+            switch (personalityType) {
+                case 'реалист':
+                    resultsText = 'Вы обладаете реалистичным типом личности. Вам подходят профессии, связанные с физическим трудом и практическими навыками, например, строитель, механик или фермер.';
+                    break;
+                case 'художник':
+                    resultsText = 'Вы обладаете художественным типом личности. Вам подходят профессии, требующие творческих способностей и эстетического восприятия, например, художник, музыкант или дизайнер.';
+                    break;
+                case 'исследователь':
+                    resultsText = 'Вы обладаете исследовательским типом личности. Вам подходят профессии, связанные с анализом и поиском решений сложных проблем, например, ученый, математик или инженер.';
+                    break;
+                case 'социальный работник':
+                    resultsText = 'Вы обладаете социальным типом личности. Вам подходят профессии, связанные с обслуживанием людей и решением их проблем, например, психолог, учитель или медицинский работник.';
+                    break;
+                case 'предприниматель':
+                    resultsText = 'Вы обладаете предпринимательским типом личности. Вам подходят профессии, требующие организационных и лидерских способностей, например, предприниматель, менеджер или политик.';
+                    break;
+                case 'конвенционалист':
+                    resultsText = 'Вы обладаете конвенциональным типом личности. Вам подходят профессии, связанные с выполнением поручений и соблюдением правил и норм, например, бухгалтер, юрист или архивариус.';
+                    break;
+                default:
+                    resultsText = 'Вы имеете несколько типов личности. Рекомендуется обратиться к профессионалам для определения наиболее подходящих профессий для вас.';
+                    break;
+            }
+            // Отображение текста с результатами на странице
+            resultsDiv.innerHTML = `<h3>Ваш тип личности: ${personalityType}</h3><p>${resultsText}</p>`;
+        }
+
+// Получение элементов формы и установка обработчика события для отправки формы
+        const form = document.getElementById('quiz-form');
+        form.addEventListener('submit', (event) => {
+            event.preventDefault(); // Отмена действия по умолчанию (отправки формы)
+// Получение ответов на вопросы теста
+            const answers = {
+                'question-1': document.querySelector('input[name="question-1"]:checked').value,
+                'question-2': document.querySelector('input[name="question-2"]:checked').value,
+                'question-3': document.querySelector('input[name="question-3"]:checked').value,
+                'question-4': document.querySelector('input[name="question-4"]:checked').value,
+                'question-5': document.querySelector('input[name="question-5"]:checked').value,
+                'question-6': document.querySelector('input[name="question-6"]:checked').value,
+                'question-7': document.querySelector('input[name="question-7"]:checked').value,
+                'question-8': document.querySelector('input[name="question-8"]:checked').value,
+                'question-9': document.querySelector('input[name="question-9"]:checked').value,
+                'question-10': document.querySelector('input[name="question-10"]:checked').value,
+            };
+
+// Вычисление типа личности на основе ответов на вопросы теста
+            const personalityType = calculatePersonalityType(answers);
+
+// Отображение результатов теста
+            showResults(personalityType);
+        });
+
